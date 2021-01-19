@@ -28,7 +28,15 @@ def digits_to_words(input_string):
             >>> tp2.digits_to_words(digits_str2)
             'three one four one five'
     """
-    digit_string = None
+    alphas = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    trans = dict()
+    for i, alpha in enumerate(alphas):
+        trans[str(i)] = alpha
+    digit_string = ""
+    for char in input_string:
+        if char in trans:
+            digit_string += trans[char] + " "
+    digit_string = digit_string.rstrip()
     return digit_string
 
 
@@ -64,5 +72,37 @@ def to_camel_case(underscore_str):
             >>> tp2.to_camel_case(underscore_str3)
             "alreadyCamel"
     """
-    camelcase_str = None
-    return camelcase_str
+    # 앞의 underscore는 무시한다.
+    # 모든 문자는 소문자 => 단, underscore다음은 대문자.
+    # 뒤의 underscore는 무시한다.
+    temp_str = ""
+    for char in underscore_str:
+        if char == "_" and (not temp_str or temp_str[-1] == "_"):
+            continue
+        temp_str += char
+    # _ 하나만 남게 바꿈
+    # print(temp_str)
+
+    underscore_str = ""
+    word_list = list(temp_str.split("_"))
+    if len(word_list) == 1:
+        underscore_str = word_list[0]
+        return underscore_str
+    for i, word in enumerate(word_list):
+        temp = ""
+        for j, char in enumerate(word):
+            if j == 0:
+                if i == 0:
+                    temp += char.lower()
+                else:
+                    temp += char.upper()
+            else:
+                temp += char.lower()
+        underscore_str += temp
+    return underscore_str
+# print(digits_to_words("Zip Code: 19104")) #'one nine one zero four'
+# print(digits_to_words("Pi is 3.1415...")) #'three one four one five'
+
+# print(to_camel_case("to_camel_case")) # "toCamelCase"
+# print(to_camel_case("__EXAMPLE__NAME__")) #"exampleName"
+# print(to_camel_case("alreadyCamel")) #"alreadyCamel"
