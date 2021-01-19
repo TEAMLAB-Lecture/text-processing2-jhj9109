@@ -75,47 +75,31 @@ def to_camel_case(underscore_str):
     # 앞의 underscore는 무시한다.
     # 모든 문자는 소문자 => 단, underscore다음은 대문자.
     # 뒤의 underscore는 무시한다.
-    new_str = ""
-
-    is_first_word = True
-    prev_is_underscore = False
-    i = 0
-
-    while i < len(underscore_str):
-        char = underscore_str[i]
-        # 언더스코어를 만났을때
-        if char == "_":
-            prev_is_underscore = True
-            i += 1
+    temp_str = ""
+    for char in underscore_str:
+        if char == "_" and (not temp_str or temp_str[-1] == "_"):
             continue
-        # 글자를 만났을때
-        if not prev_is_underscore:
-            # 언더스코어 뒤에만 카멜 규칙 적용
-            is_first_word = False
-            new_str += char
-            i += 1
-            continue
-        if is_first_word:
-            # 첫단어의 첫글자는 소문자
-            is_first_word = False
-            new_str += char.lower()
-        else:
-            # 그외 단어의 첫글자는 대문자
-            new_str += char.upper()
-        prev_is_underscore = False
-        i += 1
-        while i < len(underscore_str):
-            char = underscore_str[i]
-            if char == "_":
-                prev_is_underscore = True
-                i += 1
-                break
+        temp_str += char
+    # _ 하나만 남게 바꿈
+    # print(temp_str)
+
+    underscore_str = ""
+    word_list = list(temp_str.split("_"))
+    if len(word_list) == 1:
+        underscore_str = word_list[0]
+        return underscore_str
+    for i, word in enumerate(word_list):
+        temp = ""
+        for j, char in enumerate(word):
+            if j == 0:
+                if i == 0:
+                    temp += char.lower()
+                else:
+                    temp += char.upper()
             else:
-                # 이후 단어는 소문자
-                new_str += char.lower()
-                i += 1
-    camelcase_str = new_str
-    return camelcase_str
+                temp += char.lower()
+        underscore_str += temp
+    return underscore_str
 # print(digits_to_words("Zip Code: 19104")) #'one nine one zero four'
 # print(digits_to_words("Pi is 3.1415...")) #'three one four one five'
 
