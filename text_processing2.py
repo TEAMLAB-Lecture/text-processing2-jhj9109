@@ -91,6 +91,7 @@ def to_camel_case(underscore_str):
         # 글자를 만났을때
         if not prev_is_underscore:
             # 언더스코어 뒤에만 카멜 규칙 적용
+            is_first_word = False
             new_str += char
             i += 1
             continue
