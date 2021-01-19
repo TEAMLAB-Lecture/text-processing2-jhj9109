@@ -28,7 +28,15 @@ def digits_to_words(input_string):
             >>> tp2.digits_to_words(digits_str2)
             'three one four one five'
     """
-    digit_string = None
+    alphas = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    trans = dict()
+    for i, alpha in enumerate(alphas):
+        trans[str(i)] = alpha
+    digit_string = ""
+    for char in input_string:
+        if char in trans:
+            digit_string += trans[char] + " "
+    digit_string.strip()
     return digit_string
 
 
@@ -64,5 +72,27 @@ def to_camel_case(underscore_str):
             >>> tp2.to_camel_case(underscore_str3)
             "alreadyCamel"
     """
-    camelcase_str = None
+    # 앞의 underscore는 무시한다.
+    # 모든 문자는 소문자 => 단, underscore다음은 대문자.
+    # 뒤의 underscore는 무시한다.
+    new_str = ""
+    is_first_word = True
+    prev_is_underscore = True
+    for i, char in enumerate(underscore_str):
+        if char == "_":
+            prev_is_underscore = True
+        else:
+            if is_first_word or not prev_is_underscore:
+                new_str += char.lower()
+                is_first_word = False
+            else:
+                new_str += char.upper()
+            prev_is_underscore = False
+    camelcase_str = new_str
     return camelcase_str
+# print(digits_to_words("Zip Code: 19104")) #'one nine one zero four'
+# print(digits_to_words("Pi is 3.1415...")) #'three one four one five'
+
+# print(to_camel_case("to_camel_case")) # "toCamelCase"
+# print(to_camel_case("__EXAMPLE__NAME__")) #"exampleName"
+# print(to_camel_case("alreadyCamel")) #"alreadyCamel"
