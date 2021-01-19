@@ -36,7 +36,7 @@ def digits_to_words(input_string):
     for char in input_string:
         if char in trans:
             digit_string += trans[char] + " "
-    digit_string.strip()
+    digit_string = digit_string.rstrip()
     return digit_string
 
 
