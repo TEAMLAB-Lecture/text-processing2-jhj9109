@@ -76,18 +76,43 @@ def to_camel_case(underscore_str):
     # 모든 문자는 소문자 => 단, underscore다음은 대문자.
     # 뒤의 underscore는 무시한다.
     new_str = ""
+
     is_first_word = True
-    prev_is_underscore = True
-    for i, char in enumerate(underscore_str):
+    prev_is_underscore = False
+    i = 0
+
+    while i < len(underscore_str):
+        char = underscore_str[i]
+        # 언더스코어를 만났을때
         if char == "_":
             prev_is_underscore = True
+            i += 1
+            continue
+        # 글자를 만났을때
+        if not prev_is_underscore:
+            # 언더스코어 뒤에만 카멜 규칙 적용
+            new_str += char
+            i += 1
+            continue
+        if is_first_word:
+            # 첫단어의 첫글자는 소문자
+            is_first_word = False
+            new_str += char.lower()
         else:
-            if is_first_word or not prev_is_underscore:
-                new_str += char.lower()
-                is_first_word = False
+            # 그외 단어의 첫글자는 대문자
+            new_str += char.upper()
+        prev_is_underscore = False
+        i += 1
+        while i < len(underscore_str):
+            char = underscore_str[i]
+            if char == "_":
+                prev_is_underscore = True
+                i += 1
+                break
             else:
-                new_str += char.upper()
-            prev_is_underscore = False
+                # 이후 단어는 소문자
+                new_str += char.lower()
+                i += 1
     camelcase_str = new_str
     return camelcase_str
 # print(digits_to_words("Zip Code: 19104")) #'one nine one zero four'
